@@ -161,12 +161,12 @@ impl<'a> PipelineGenerator<'a> {
 
             unsafe impl Send for #pipeline_name { }
 
-            #[no_mangle]
+            #[unsafe(no_mangle)]
             pub extern "C" fn #c_create_fn(radix: u16)
-            -> *mut dyn p4rs::Pipeline{
+            -> *mut std::ffi::c_void{
                 let pipeline = main_pipeline::new(radix);
                 let boxpipe: Box<dyn p4rs::Pipeline> = Box::new(pipeline);
-                Box::into_raw(boxpipe)
+                Box::into_raw(boxpipe) as *mut std::ffi::c_void
             }
         };
 
