@@ -915,6 +915,7 @@ dependencies = [
  "p4rs",
  "pnet",
  "rand",
+ "sidecar-lite",
  "usdt",
  "xfr",
 ]
@@ -1218,6 +1219,16 @@ dependencies = [
  "tests",
  "usdt",
  "xfr",
+]
+
+[[package]]
+name = "x4c-example"
+version = "0.1.0"
+dependencies = [
+ "bitvec",
+ "colored",
+ "p4rs",
+ "usdt",
 ]
 
 [[package]]

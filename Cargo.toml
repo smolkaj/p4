@@ -11,7 +11,7 @@ members = [
     "lang/p4-macro-test",
     "lang/prog/sidecar-lite",
     "test",
-    "book/code",
+    "book/code", "x4c-example",
 ]
 
 [workspace.dependencies]

@@ -17,3 +17,4 @@ anyhow.workspace  = true
 
 [dev-dependencies]
 libloading.workspace = true
+sidecar-lite = { path = "../lang/prog/sidecar-lite" }
