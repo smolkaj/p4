@@ -12,6 +12,7 @@ members = [
     "lang/prog/sidecar-lite",
     "test",
     "book/code",
+    "p4runtime_server",
 ]
 
 [workspace.dependencies]
