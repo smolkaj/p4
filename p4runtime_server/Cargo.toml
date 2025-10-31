@@ -8,6 +8,12 @@ edition = "2021"
 tonic = "0.14"
 tonic-reflection = "0.14"
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+tokio-stream = "0.1"
 p4runtime-prost = { git = "https://github.com/p4lang/p4runtime.git", branch = "rust-redesign" }
 p4runtime-tonic = { git = "https://github.com/p4lang/p4runtime.git", branch = "rust-redesign" }
-tokio-stream = "0.1"
+p4rs.workspace = true
+p4-macro.workspace = true
+colored.workspace = true
+bitvec.workspace = true
+num.workspace = true
+usdt.workspace = true

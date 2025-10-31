@@ -1024,12 +1024,18 @@ dependencies = [
 name = "p4runtime-server"
 version = "0.1.0"
 dependencies = [
+ "bitvec",
+ "colored",
+ "num",
+ "p4-macro",
+ "p4rs",
  "p4runtime-prost",
  "p4runtime-tonic",
  "tokio",
  "tokio-stream",
  "tonic",
  "tonic-reflection",
+ "usdt",
 ]
 
 [[package]]
