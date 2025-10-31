@@ -75,12 +75,14 @@ impl P4Runtime for P4RuntimeService {
         let pipeline =
             Box::new(main_pipeline::new(0)) as Box<dyn p4rs::Pipeline>;
 
-        let translator = P4RuntimeP4rsTranslator::new(pipeline.as_ref(), &p4info)?;
+        let translator =
+            P4RuntimeP4rsTranslator::new(pipeline.as_ref(), &p4info)?;
 
         // Store pipeline, translator, and P4Info together, ensuring they're always in sync.
-        let mut guard = self.configured_pipeline.lock().map_err(|e| {
-            Status::internal(format!("mutex poisoned: {}", e))
-        })?;
+        let mut guard = self
+            .configured_pipeline
+            .lock()
+            .map_err(|e| Status::internal(format!("mutex poisoned: {}", e)))?;
         *guard = Some(ConfiguredPipeline {
             pipeline,
             translator,
@@ -96,9 +98,10 @@ impl P4Runtime for P4RuntimeService {
     ) -> Result<Response<GetForwardingPipelineConfigResponse>, Status> {
         let _req = request.into_inner();
 
-        let guard = self.configured_pipeline.lock().map_err(|e| {
-            Status::internal(format!("mutex poisoned: {}", e))
-        })?;
+        let guard = self
+            .configured_pipeline
+            .lock()
+            .map_err(|e| Status::internal(format!("mutex poisoned: {}", e)))?;
 
         let configured = guard.as_ref().ok_or_else(|| {
             Status::failed_precondition("no pipeline configured")
@@ -123,9 +126,10 @@ impl P4Runtime for P4RuntimeService {
     ) -> Result<Response<WriteResponse>, Status> {
         let req = request.into_inner();
 
-        let mut guard = self.configured_pipeline.lock().map_err(|e| {
-            Status::internal(format!("mutex poisoned: {}", e))
-        })?;
+        let mut guard = self
+            .configured_pipeline
+            .lock()
+            .map_err(|e| Status::internal(format!("mutex poisoned: {}", e)))?;
         let configured = guard.as_mut().ok_or_else(|| {
             Status::failed_precondition("no pipeline configured")
         })?;
@@ -180,9 +184,9 @@ fn process_update(
     // Extract update type first, before moving update.entity.
     let update_type = update.r#type();
 
-    let entity = update.entity.ok_or_else(|| {
-        Status::invalid_argument("update missing entity")
-    })?;
+    let entity = update
+        .entity
+        .ok_or_else(|| Status::invalid_argument("update missing entity"))?;
 
     // Currently only handle TableEntry entities.
     let entry = match entity.entity {
@@ -254,7 +258,9 @@ fn process_update(
             let (action_id, params) = match action.r#type {
                 Some(table_action::Type::Action(action)) => {
                     let action_id = action.action_id;
-                    let params = action.params.iter()
+                    let params = action
+                        .params
+                        .iter()
                         .flat_map(|p| p.value.clone())
                         .collect::<Vec<u8>>();
                     (action_id, params)
@@ -269,13 +275,17 @@ fn process_update(
                         "action profile groups not yet supported",
                     ));
                 }
-                Some(table_action::Type::ActionProfileActionSet(_action_set)) => {
+                Some(table_action::Type::ActionProfileActionSet(
+                    _action_set,
+                )) => {
                     return Err(Status::unimplemented(
                         "action profile action sets not yet supported",
                     ));
                 }
                 None => {
-                    return Err(Status::invalid_argument("action missing type"));
+                    return Err(Status::invalid_argument(
+                        "action missing type",
+                    ));
                 }
             };
 
@@ -284,7 +294,10 @@ fn process_update(
 
             // Extract priority and convert from i32 to u32.
             let priority = entry.priority.try_into().map_err(|_| {
-                Status::invalid_argument(format!("invalid priority: {}", entry.priority))
+                Status::invalid_argument(format!(
+                    "invalid priority: {}",
+                    entry.priority
+                ))
             })?;
 
             (action_name, params, priority)
@@ -326,6 +339,7 @@ fn process_update(
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:9559".parse()?;
+
     let p4runtime_service = P4RuntimeService::default();
     let reflection_service = ReflectionBuilder::configure()
         .register_file_descriptor_set(p4runtime_prost::file_descriptor_set())

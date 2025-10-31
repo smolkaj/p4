@@ -17,3 +17,7 @@ colored.workspace = true
 bitvec.workspace = true
 num.workspace = true
 usdt.workspace = true
+
+[dev-dependencies]
+trycmd = "0.15"
+which = "6"

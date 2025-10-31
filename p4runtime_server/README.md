@@ -72,7 +72,7 @@ The server supports [gRPC reflection](https://grpc.io/docs/guides/reflection/), 
 
 2. **Call a method**:
    ```bash
-   grpcurl -plaintext localhost:9559 p4.v1.P4Runtime.Write -d "<my request>"
+   grpcurl -plaintext -d "<my request>" localhost:9559 p4.v1.P4Runtime.Write
    ```
    
    This will call the `Write` method with `<my request>` specified in text format.

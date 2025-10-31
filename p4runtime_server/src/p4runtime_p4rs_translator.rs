@@ -44,9 +44,7 @@ impl P4RuntimeP4rsTranslator {
         // We need to match them with p4rs qualified names from the pipeline.
         for table in &p4info.tables {
             let preamble = table.preamble.as_ref().ok_or_else(|| {
-                Status::invalid_argument(format!(
-                    "table missing preamble"
-                ))
+                Status::invalid_argument(format!("table missing preamble"))
             })?;
 
             let table_id = preamble.id;
@@ -67,8 +65,9 @@ impl P4RuntimeP4rsTranslator {
             // - p4rs names are always fully qualified (ingress/egress.control.table)
             // - Table names are unique within a control block
             // - split('.').last() is safe: if there's no '.', it returns the whole string
-            let p4info_table_name = p4info_name.split('.').last().unwrap_or(p4info_name);
-            
+            let p4info_table_name =
+                p4info_name.split('.').last().unwrap_or(p4info_name);
+
             let p4rs_name = pipeline_table_names
                 .iter()
                 .find(|&p4rs_name| {
@@ -103,9 +102,7 @@ impl P4RuntimeP4rsTranslator {
         // The p4rs action names are just the action name (no qualification).
         for action in &p4info.actions {
             let preamble = action.preamble.as_ref().ok_or_else(|| {
-                Status::invalid_argument(format!(
-                    "action missing preamble"
-                ))
+                Status::invalid_argument(format!("action missing preamble"))
             })?;
 
             let action_id = preamble.id;
